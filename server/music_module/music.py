@@ -14,7 +14,7 @@ class Music:
     def __init__(self):
         self.user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36'
         self.options = webdriver.ChromeOptions()
-        self.options.headless = False
+        self.options.headless = True
         self.options.add_argument(f'user-agent={self.user_agent}')
         self.options.add_argument("--window-size=1920,1080")
         self.options.add_argument('--ignore-certificate-errors')
