@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Document</title>
+
+    <style>
+        #particles-js {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0.5)),url("{{url_for('static', filename='images/headphone.jpg')}}");
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+            /* overflow: hidden; */
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Yusei Magic', sans-serif;;
+        }
+
+
+
+        .logo {
+            margin-top: 25px;
+            font-size: 28px;
+            color: white;
+        }
+        
+        .welcome {
+            margin-left: 5%;
+            position: absolute;
+        }
+
+
+        .center-div {
+            margin: 0 auto;
+        }
+
+        /* Morphing Button */
+        .btn-morph {
+            width: 60px; 
+            height: 60px;
+            background-color: white; 
+            border-radius: 60px;
+            border: 1px solid white;
+            color: white;
+            position: relative;
+            margin: 0 auto;
+            margin-top: 36rem;
+            margin-left: 38rem;
+            overflow: hidden;
+            transition: width 0.2s ease-in-out;
+            cursor: pointer;
+        }
+
+
+        .arrow {
+            display: inline-block;
+            position: absolute;
+            top: 50%;
+            /* right: 50%; */
+            right: 30px;
+            transform: translate(50%, -50%);
+        }
+
+
+        @media only screen and (max-width: 600px) {
+            .btn-morph {
+                width: 60px; 
+                height: 60px;
+                background-color: white; 
+                border-radius: 60px;
+                color: white;
+                position: relative;
+                margin: 0 auto;
+                margin-top: 31rem;
+                margin-left: 8rem;
+                overflow: hidden;
+                transition: width 0.3s ease-in;
+                cursor: pointer;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome">
+        <div class="logo">Ceddra</div>
+        <div class="circle btn-morph center-div">
+            <div class="arrow" id="command">
+                <i class="fa fa-microphone" style="font-size:20px; color:black;"></i>
+            </div>
+        </div>
+        <h3 class="output">output</h3>
+    </div>
+    <div id="particles-js"></div>
+    <script src="{{url_for('static', filename='js/particles.js')}}"></script>
+    <script src="{{url_for('static', filename='js/app.js')}}"></script>
+    <script>
+        const grammar = '#JSGF V1.0; grammar colors; public <color> = ceddra | cedra;'
+        var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition
+        var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList
+
+        var recognition = new SpeechRecognition()
+        var speechRecognitionList = new SpeechGrammarList()
+
+
+        speechRecognitionList.addFromString(grammar, 1)
+        recognition.grammars = speechRecognitionList
+        recognition.continuous = false
+        recognition.lang = 'en-US'
+        recognition.interimResults = false
+        recognition.maxAlternatives = 1
+
+        let diagnostic = document.querySelector('.output')
+        let bg = document.querySelector('html')
+
+
+
+        let speech_back = null
+
+        document.querySelector('#command').addEventListener('click', function() {
+            recognition.start()
+            if(speech_back !== null && speech_back !== 'Sorry i did not get that'){
+                setTimeout(function () {
+                    console.log('Am here now')
+                    let synth = window.speechSynthesis
+                    let utterThis = new SpeechSynthesisUtterance(speech_back)
+                    utterThis.rate = 0.7
+                    utterThis.pitch = 0
+                    synth.speak(utterThis)           
+            }, 10000);
+            } else {
+                setTimeout(function(){
+                    let synth = window.speechSynthesis
+                    let utterThis = new SpeechSynthesisUtterance(speech_back)
+                    utterThis.rate = 0.7
+                    utterThis.pitch = 0
+                    synth.speak(utterThis)
+                }, 2000)
+            }
+
+        })
+
+
+
+        const reply = (reply_back) => {
+            if (reply_back.toLowerCase().includes('play me') && reply_back.length > 7) {
+                textIndex = reply_back.indexOf('play me')
+                new_text = reply_back.slice(8)
+                let song_name = {Message : new_text}
+                speech_back = 'playing ' + new_text + ' Sorry this might actually take some time, due to my scraping algorithm'
+                send_request(song_name)
+            } else if (reply_back.toLowerCase().includes('play') && reply_back.length > 4){
+                textIndex = reply_back.indexOf('play')
+                new_text = reply_back.slice(5)
+                song_title = new_text
+                speech_back = 'playing ' + new_text + ' Sorry this might actually take some time, due to my scraping algorithm'
+                let song_name = {Message : new_text}
+                send_request(song_name)
+            } else if(reply_back.toLowerCase().includes('who built you')){
+                speech_back = 'A python developer named precious josiah built me, trust me he is awesome'
+                
+            }else {
+                speech_back = 'Sorry i did not get that'
+            }
+
+        }
+
+
+        const send_request = (userInput) => {
+            // Async fetch
+            fetch('/get_song', {
+                method: 'POST',
+                credentials: 'include',
+                body: JSON.stringify(userInput),
+                cache: 'no-cache',
+                headers: new Headers({
+                    'content-type': 'application/json'
+                })
+            })
+            // .then(function(response) {
+            //     if (response.status !== 200) {
+            //         console.log('Response status')
+            //     }
+
+            //     response.json().then(function(data) {
+            //         console.log(data)
+            //     })
+            // })
+
+
+            
+        }
+
+        recognition.onresult = function(event) {
+            var last = event.results.length - 1
+            var speech = event.results[last][0].transcript
+            
+            diagnostic.textContent = 'Speech: ' + speech
+
+
+            // calling the reply function
+            reply(speech + ',')
+            
+        }
+
+
+
+    </script>
+
+</body>
+</html>

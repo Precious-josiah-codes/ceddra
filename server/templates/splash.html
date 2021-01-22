@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='css/splash.css')}}">
+    
+    
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Yusei+Magic&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            font-family: 'Yusei Magic', sans-serif;
+        }
+
+        body, html {
+            padding: 0;
+            margin: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            overflow: hidden;
+            
+        }
+
+
+        input {
+            position: absolute;
+            opacity: 0;
+            margin-top: 95vh;
+            cursor: pointer;
+        }
+
+
+        label {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border: solid 2px white;
+            border-radius: 999px;
+            background-color: transparent;
+            margin: 95vh 6px 0 6px;
+            z-index: 2;
+            cursor: pointer;
+            transition-duration: 0.4s;
+        }
+
+        input:checked + label {
+            background-color: white;
+        }
+
+        input:focus + label {
+            box-shadow: 0 0 0 2px aqua, 0 0 18px white;
+
+        }
+
+
+        .slide {
+            position: absolute;
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100%;
+            top: 0%;
+            left: 0%;
+            z-index: -1;
+            transform: translateX(-100%);
+            transition-duration: 0.8s;
+            opacity: 1;
+        }
+
+        .slide .sub {
+            display: block;
+            padding-top: 1rem; 
+            padding-bottom: 1rem;
+            font-size: 1.0rem;
+            word-wrap: break-word;
+            color: whitesmoke;
+        }
+
+        .slide .head {
+            display: block;
+            font-size: 1.4rem;
+            color: white;
+        }
+
+        .title {
+            position: absolute;
+            width: 100%;
+            top: 70%;
+            overflow: hidden;
+        }
+
+        input:checked ~ .slide {
+            transform: translateY(100%);
+        }
+
+        input:checked + label + .slide {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        /* .skipp a:link {
+            color: white;
+            text-decoration: none;
+        } */
+
+        /* unvisited link */
+        .skip a:link {
+            background-color: black;
+            color: white;
+            border: 2px solid white;
+            padding: 10px 20px;
+            width: 10%;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+        }
+        
+
+
+
+
+        @media only screen and (max-width: 600px) {
+            .title {
+                position: absolute;
+                width: 100%;
+                top: 65%;
+                overflow: hidden;
+            }
+
+            .slide .sub {
+                display: block;
+                padding-left: 1rem;
+                padding-right: 1rem;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+                font-size: 1.0rem;
+                word-wrap: break-word;
+                color: whitesmoke;
+            }
+
+            body, html {
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                height: 100%;
+                text-align: center;
+                overflow: hidden;
+                font-family: 'Yusei Magic', sans-serif;
+                
+            }
+
+
+        }
+        .img1 {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)),url("{{url_for('static', filename='images/1.jpg')}}");
+        }
+            
+        .img2 {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)),url("{{url_for('static', filename='images/2.jpg')}}");
+        }
+
+        .img3 {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgb(0, 0, 0)),url("{{url_for('static', filename='images/3.jpg')}}");
+        }
+
+
+
+    </style>
+
+</head>
+<body>
+    <div class="intro">
+        <h1 class="logo-header">
+            <span class="logo">Ce</span><span class="logo">dd</span><span class="logo">ra.</span>
+        </h1>
+    </div>
+
+    
+    <input type="radio" name="slider" id="trigger1" checked autofocus>
+    <label for="trigger1"></label>
+    <div class="slide img1">
+        <div class="title">
+            <span class="head all">Listen Music</span>
+            <span class="sub all">Stream your favourite songs from top rated artiste, all with the power of your voice</span>
+        </div>
+    </div>
+    
+    <input type="radio" name="slider" id="trigger2" autofocus>
+    <label for="trigger2"></label>
+    <div class="slide img2">
+        <div class="title">
+            <span class="head all">Connect Emotionally</span>
+            <span class="sub all">Stay in sync with your mood, Stream songs that connect with you emotionally, sad happy!</span>
+        </div>
+    </div>
+    
+    <input type="radio" name="slider" id="trigger3" autofocus>
+    <label for="trigger3"></label>
+    <div class="slide img3">
+        <div class="title">
+            <span class="head all">Sync Device</span>
+            <span class="sub all">Stream your favourite songs across multiple bluetooth device</span>
+        </div>
+    </div>
+    <a href="/music" style="color: white; text-decoration: none;">Skip</a> 
+
+    <script src="{{url_for('static', filename='js/splash.js')}}"></script>
+</body>
+</html>
