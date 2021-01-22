@@ -28,6 +28,4 @@ def song():
     return 'done playing'
     
 
-
-if __name__ == '__main__':
-    app.run()
+app.run()
