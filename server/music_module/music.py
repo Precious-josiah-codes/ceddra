@@ -8,7 +8,7 @@ from selenium.common.exceptions import StaleElementReferenceException, NoSuchEle
 from bs4 import BeautifulSoup
 import time
 import random
-
+import os
 
 class Music:
     def __init__(self):
@@ -16,6 +16,7 @@ class Music:
         self.options = webdriver.ChromeOptions()
         self.options.headless = True
         self.options.add_argument(f'user-agent={self.user_agent}')
+        self.options.binary_location = os.environ.get('GOOGLE_CHROME_BIN')
         self.options.add_argument("--window-size=1920,1080")
         self.options.add_argument('--ignore-certificate-errors')
         self.options.add_argument('--allow-running-insecure-content')
@@ -26,7 +27,7 @@ class Music:
         self.options.add_argument('--disable-gpu')
         self.options.add_argument('--disable-dev-shm-usage')
         self.options.add_argument('--no-sandbox')
-        self.driver = webdriver.Chrome(executable_path='chromedriver.exe', options=self.options)
+        self.driver = webdriver.Chrome(executable_path=os.environ.get('CHROMEDRIVER PATH'), options=self.options)
         
         self.moods = {
             'sad': [
