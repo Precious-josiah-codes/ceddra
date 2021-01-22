@@ -27,5 +27,5 @@ def song():
 
     return 'done playing'
     
-
-app.run()
+if __name__ == '__main__':
+    app.run()
